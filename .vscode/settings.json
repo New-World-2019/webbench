@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "getopt.h": "c",
+        "getopt_ext.h": "c"
+    }
+}
