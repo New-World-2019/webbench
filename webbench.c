@@ -106,6 +106,7 @@ static void usage(void)
 	"  -V|--version             Display program version.\n" // 显示版本信息
 	);
 };
+
 //主函数
 int main(int argc, char *argv[])
 {
@@ -209,17 +210,16 @@ void build_request(const char *url)
    char tmp[10];
    int i;
 
-   //初始化
+   // 初始化
    bzero(host,MAXHOSTNAMELEN);
    bzero(request,REQUEST_SIZE);
 
-   // 检查通信协议
+   // 1. 检查通信协议，添加请求方法到 request
    if(force_reload && proxyhost != NULL && http10 < 1) http10 = 1;
    if(method == METHOD_HEAD && http10 < 1) http10 = 1;
    if(method == METHOD_OPTIONS && http10 < 2) http10 = 2;
    if(method == METHOD_TRACE && http10 < 2) http10 = 2;
 
-   // 添加请求方法
    switch(method) {
 	   default:
 	   case METHOD_GET: strcpy(request,"GET");break;
@@ -228,20 +228,21 @@ void build_request(const char *url)
 	   case METHOD_TRACE: strcpy(request,"TRACE");break;
    }
   
-   // 添加空格
+   // 2. 添加空格
    strcat(request," ");
 
-   // 检查 URL
+   // 3. 检查 URL
    if(NULL==strstr(url,"://")) {
 	   fprintf(stderr, "\n%s: is not a valid URL.\n",url);
 	   exit(2);
    }
+   // 检查 url 长度
    if(strlen(url) > 1500) {
       fprintf(stderr,"URL is too long.\n");
 	   exit(2);
    }
    
-   // 如果代理为空，切 url 不是以 http:// 开头，则输出错误
+   // 如果代理为空，且 url 不是以 http:// 开头，则输出错误
    if(proxyhost == NULL)
 	   if (0 != strncasecmp("http://", url, 7)) {
          fprintf(stderr,"\nOnly HTTP protocol is directly supported, set --proxy for others.\n");
@@ -274,8 +275,9 @@ void build_request(const char *url)
       strcat(request,url);
    }
   
+   // 处理通信协议
    if(http10 == 1)
-	   strcat(request," HTTP/1.0");
+	   strcat(request," HTTP/1.0"); // 将 " HTTP/1.0" 追加到 request 后
    else if (http10 == 2)
 	   strcat(request," HTTP/1.1");
    strcat(request,"\r\n");
