@@ -304,11 +304,13 @@ void build_request(const char *url)
 /* vraci system rc error kod */
 static int bench(void)
 {
+  printf("function bench\n");
   int i, j, k;	
   pid_t pid = 0;
   FILE *f;
 
    // 检查目标服务器是否可用
+   printf("host = %s\n", host);// www.baidu.com
    i = Socket(proxyhost == NULL ? host:proxyhost,proxyport);
    if(i < 0) { 
       fprintf(stderr,"\nConnect to server failed. Aborting benchmark.\n");
