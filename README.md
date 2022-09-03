@@ -1,5 +1,9 @@
 # webbench 开源项目讲解
 
+webbench 主要包括三个文件：webbench.c、socket.c、Makefile。
+* webbench.c : 测压主文件
+* socket.c : 将 socket 的连接封装成了函数
+* Makefile : 程序的编译文件
 
 
 ## 一、参数解析
@@ -41,8 +45,8 @@ Host: www.baidu.com
 
 ### 1. 通过 Socket 测试 host 是否通；
 ### 2. pipe 创建父子进程通信的管道；
-### 3. 产生 clients 个客户端；
-### 4. 子进程执行测压，父进程接收子进程测压结果，并进行统计。
+### 3. fork 函数产生 clients 个客户端；
+### 4. 子进程执行测压，父进程接收子进程测压结果，并进行统计，最后输出统计信息
 
 
 

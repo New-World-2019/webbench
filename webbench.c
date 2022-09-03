@@ -405,6 +405,13 @@ static int bench(void)
   return i;
 }
 
+/**
+ * @brief 与服务器进行连接
+ * 
+ * @param host 
+ * @param port 
+ * @param req 
+ */
 void benchcore(const char *host,const int port,const char *req)
 {
    int rlen;
@@ -436,7 +443,7 @@ void benchcore(const char *host,const int port,const char *req)
          return;
       }
 
-      // 创建一个 socket
+      // 创建一个 socket，Socket 为 socket.c 文件中封装的函数
       s = Socket(host, port);                          
       if(s < 0) { 
          failed++;

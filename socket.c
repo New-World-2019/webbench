@@ -26,6 +26,13 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+/**
+ * @brief 封装了 socket 连接
+ * 
+ * @param host 
+ * @param clientPort 
+ * @return int 
+ */
 int Socket(const char *host, int clientPort)
 {
     int sock;
