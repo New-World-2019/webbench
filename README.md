@@ -7,7 +7,7 @@ webbench 主要包括三个文件：webbench.c、socket.c、Makefile。
 
 ## webbench 流程图
 
-![webbench 流程图](./flowChart.png#pic_center)
+![webbench 流程图]([./flowChart.png]#pic_center)
 
 ## 一、参数解析
 ### 1. 通过 main 函数接收参数 argc 和 argv;
