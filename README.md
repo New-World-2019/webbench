@@ -15,6 +15,11 @@ webbench 主要包括三个文件：webbench.c、socket.c、Makefile。
 ```
 Linux version 5.15.0-46-generic (buildd@lcy02-amd64-007) (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #49~20.04.1-Ubuntu SMP Thu Aug 4 19:15:44 UTC 2022
 ```
+## 构建方法
+```
+make
+./webbench 参数信息
+```
 ## 一、参数解析
 1. 通过 main 函数接收参数 argc 和 argv;
 2. C语言库函数 getopt_long 解析参数，其中 getopt_long 如下所是：
