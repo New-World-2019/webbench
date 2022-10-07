@@ -45,9 +45,9 @@ int method = METHOD_GET;
 int clients = 1; // 进程个数，默认 1 个
 int force = 0;   // 是否接受服务区的返回信息
 int force_reload = 0;
-int proxyport=80;
-char *proxyhost=NULL;
-int benchtime=30;
+int proxyport = 80;
+char *proxyhost = NULL;
+int benchtime = 30;
 /* internal */
 int mypipe[2];
 char host[MAXHOSTNAMELEN];
@@ -201,6 +201,7 @@ int main(int argc, char *argv[])
    if(force_reload) printf(", forcing reload");
    printf(".\n");
 
+   //4. 开始测压
    return bench();
 }
 
@@ -332,7 +333,7 @@ static int bench(void)
         sched_yield();
   */
 
-   // 使用 fork 产生子进程
+   // 使用 fork 产生 clients 个子进程
    for(i = 0; i < clients; i++) {
 	   pid = fork();
 	   if(pid <= (pid_t) 0) {
@@ -342,21 +343,22 @@ static int bench(void)
 	   }
    }
 
+   // fork 出错
    if( pid < (pid_t) 0) {
       fprintf(stderr,"problems forking worker no. %d\n",i);
 	   perror("fork failed.");
 	   return 3;
    }
 
-   // 子进程
+   // 所有产生的子进程负责测压
    if(pid == (pid_t) 0) {
-      // 子进程执行任务
-      if(proxyhost == NULL)
+      // 子进程执行测压任务
+      if(proxyhost == NULL) // 分为有代理和无代理
          benchcore(host,proxyport,request);
       else
          benchcore(proxyhost,proxyport,request);
 
-      /* write results to pipe */
+      // 以写的方式打开管道
 	   f = fdopen(mypipe[1],"w");
 	   if(f == NULL) {
 		   perror("open pipe for writing failed.");
@@ -367,8 +369,8 @@ static int bench(void)
 	   fprintf(f,"%d %d %d\n",speed,failed,bytes);
 	   fclose(f); // 关闭管道
 	   return 0;
-   } else {   // 父进程
-      // 以读的方式打开管道
+   } else {   // 父进程负责收集子进程的数据
+      // 以读的方式打开管道，与子进程通信
 	   f = fdopen(mypipe[0],"r");
       if(f == NULL) {
 		   perror("open pipe for reading failed.");
@@ -396,6 +398,7 @@ static int bench(void)
       }
 	   fclose(f);
 
+      //最终的输出信息
       printf("\nSpeed=%d pages/min, %d bytes/sec.\nRequests: %d susceed, %d failed.\n",
 		  (int)((speed+failed)/(benchtime/60.0f)),
 		  (int)(bytes/(float)benchtime),
@@ -419,14 +422,14 @@ void benchcore(const char *host,const int port,const char *req)
    int s, i;
    struct sigaction sa;
 
-   /* setup alarm signal handler */
    sa.sa_handler = alarm_handler;
    sa.sa_flags = 0;
    // 当 SIGALRM 信号触发时，调用 alarm_handler 函数
+   // 在 alarm_handler 函数中设置 timerexpired = 1，表示超时
    if(sigaction(SIGALRM, &sa, NULL))
       exit(3);
    
-   // 设置时钟，benchtime 时间后触发 SIGALRM 信号
+   // alarm 函数是一个定时器，当 benchtime 时间后触发 SIGALRM 信号
    alarm(benchtime);
 
    // 计算 req 长度
@@ -434,8 +437,7 @@ void benchcore(const char *host,const int port,const char *req)
 
    // 使用了 goto 语句，执行 goto nexttry 语句时，回到此处
    nexttry:while(1) {
-      // 检测通信时间是否到了
-      if(timerexpired) {
+      if(timerexpired) {      // 检测是否超时
          if(failed > 0) {
             /* fprintf(stderr,"Correcting failed by signal\n"); */
             failed--;
@@ -467,11 +469,10 @@ void benchcore(const char *host,const int port,const char *req)
 	   
       // force 等于 0 需要等待服务器返回结果
       if(force == 0) {
-         /* read all available data from socket */
+         //读取所有数据
 	      while(1) {
-            if(timerexpired) break; 
-	         i = read(s,buf,1500);
-            /* fprintf(stderr,"%d\n",i); */
+            if(timerexpired) break; // 超时直接跳出，不再接收
+	         i = read(s, buf, 1500);
 	         if(i < 0) { 
                failed++;
                close(s);
@@ -479,7 +480,7 @@ void benchcore(const char *host,const int port,const char *req)
             } else {
                if(i == 0) break;
 		         else
-			         bytes += i;
+			         bytes += i; //累计读取的字节数
             }
 		         
 	      }
