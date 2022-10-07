@@ -25,12 +25,12 @@ int getopt_long(int argc, char * const argv[], const char *optstring,
                 const struct option *longopts, int *longindex);
 ```
 各个参数含义如下：
-argc ：参数个数
-argv : 参数数组
-optstring : 短选项字符串
-longopts : 长选项字符串
-longindex : longopts 的下标值，如果非空，表示当前参数符合 longopts 中的参数的下标
-更详细内容可以参考：https://blog.csdn.net/qq_33850438/article/details/80172275
+* argc ：参数个数
+* argv : 参数数组
+* optstring : 短选项字符串
+* longopts : 长选项字符串
+* longindex : longopts 的下标值，如果非空，表示当前参数符合 longopts 中的参数的下标
+* 更详细内容可以参考：https://blog.csdn.net/qq_33850438/article/details/80172275
 
 ## 二、构建请求
 ### 1. 判断请求方法，将请求方法存储到 request 字符串数组中；
