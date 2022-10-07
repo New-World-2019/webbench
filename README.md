@@ -7,7 +7,7 @@ webbench 主要包括三个文件：webbench.c、socket.c、Makefile。
 
 ## webbench 流程图
 
-<div align=center width = "100" height = "100">
+<div align=center>
   <img src="./flowChart.png">
 </div>
 
