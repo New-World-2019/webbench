@@ -10,6 +10,7 @@ webbench 主要包括三个文件：webbench.c、socket.c、Makefile。
 <div align=center>
   <img src="./flowChart.png">
 </div>
+
 ## 构建环境
 ```
 Linux version 5.15.0-46-generic (buildd@lcy02-amd64-007) (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #49~20.04.1-Ubuntu SMP Thu Aug 4 19:15:44 UTC 2022
