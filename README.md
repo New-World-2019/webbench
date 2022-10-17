@@ -7,7 +7,7 @@ Web Bench 主要包括三个文件：webbench.c、socket.c、Makefile。
 
 [Web Bench 官网](http://home.tiscali.cz/~cz210552/webbench.html)
 
-## Web Bench 流程图
+## Web Bench 项目流程图
 
 <div align=center>
   <img src="./flowChart.png">
