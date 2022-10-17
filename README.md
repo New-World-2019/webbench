@@ -1,11 +1,11 @@
-# webbench 开源项目讲解
+# Web Bench 开源项目讲解
 
-webbench 主要包括三个文件：webbench.c、socket.c、Makefile。
+Web Bench 主要包括三个文件：webbench.c、socket.c、Makefile。
 * webbench.c : 测压主文件
 * socket.c : 将 socket 的连接封装成了函数
 * Makefile : 程序的编译文件
 
-## webbench 流程图
+## Web Bench 流程图
 
 <div align=center>
   <img src="./flowChart.png">
